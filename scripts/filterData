@@ -1,0 +1,32 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use JSON;
+
+
+my $json;
+{
+	local $/;
+	open my $fh, "<", "daySubredditBreakdown.json";
+	$json = <$fh>;
+	close $fh;
+}
+
+my $json_data = decode_json($json);
+
+my $json_resp = [];
+
+foreach (@{ $json_data }) {
+	$_->{'createdDay'} = $_->{'created_day'};
+	delete $_->{'created_day'};
+		push(@{ $json_resp }, $_);
+}
+
+my $json_response = JSON::to_json($json_resp, {utf8 => 1, pretty => 1});
+{
+	open my $fh, ">", "daySubredditBreakdown.json";
+	print $fh $json_response;
+	close $fh;
+}
