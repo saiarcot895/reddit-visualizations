@@ -31,7 +31,7 @@ foreach (@{ $json_data }) {
 		day => $_->{'createdDay'},
 	);
 	push(@dayCountArray, $date->epoch);
-	push(@dayCountArray, $_->{'countPosts'});
+	push(@dayCountArray, $_->{'countPosts'} + 0);
 	push(@{ $json_subreddits->{$_->{'subreddit'}}->{'values'} }, \@dayCountArray)
 }
 
