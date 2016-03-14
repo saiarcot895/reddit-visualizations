@@ -9,7 +9,7 @@ use DateTime;
 my $json;
 {
 	local $/;
-	open my $fh, "<", "daySubredditBreakdown.json";
+	open my $fh, "<", "daySubredditBreakdown-testing.json";
 	$json = <$fh>;
 	close $fh;
 }
@@ -27,33 +27,23 @@ foreach (@{ $json_data }) {
 		$json_subreddits->{$_->{'subreddit'}}->{'values'} = [];
 		$json_subreddits->{$_->{'subreddit'}}->{'valuesHash'} = {};
 	}
-	my @dayCountArray;
-	my $date = DateTime->new(
-		year => 2015,
-		month => 5,
-		day => $_->{'createdDay'},
-	);
-	push(@dayCountArray, $date->epoch);
-	$days->{$date->epoch} = ();
-	$json_subreddits->{$_->{'subreddit'}}->{'valuesHash'}->{$date->epoch} = $_->{'countPosts'} + 0;
+	my $epoch = 1430352000 + 86400 * $_->{'createdDay'};
+	$days->{$epoch} = ();
+	$json_subreddits->{$_->{'subreddit'}}->{'valuesHash'}->{$epoch} = $_->{'countPosts'} + 0;
 }
 
 my $json_resp = [];
 
 foreach (keys %$json_subreddits) {
-	foreach my $dayCount (keys %{ $json_subreddits->{$_}->{'valuesHash'} }) {
+	foreach my $day (sort keys %$days) {
 		my @dayCountArray;
-		push(@dayCountArray, $dayCount);
-		push(@dayCountArray, $json_subreddits->{$_}->{'valuesHash'}->{$dayCount});
-		push(@{ $json_subreddits->{$_}->{'values'} }, \@dayCountArray);
-	}
-	foreach my $day (keys %$days) {
+		push(@dayCountArray, $day + 0);
 		if (not exists $json_subreddits->{$_}->{'valuesHash'}->{$day}) {
-			my @dayCountArray;
-			push(@dayCountArray, $day);
 			push(@dayCountArray, 0);
-			push(@{ $json_subreddits->{$_}->{'values'} }, \@dayCountArray);
+		} else {
+			push(@dayCountArray, $json_subreddits->{$_}->{'valuesHash'}->{$day});
 		}
+		push(@{ $json_subreddits->{$_}->{'values'} }, \@dayCountArray);
 	}
 	delete $json_subreddits->{$_}->{'valuesHash'};
 	push(@{ $json_resp }, $json_subreddits->{$_});
@@ -61,7 +51,7 @@ foreach (keys %$json_subreddits) {
 
 my $json_response = JSON::to_json($json_resp, {utf8 => 1, pretty => 1});
 {
-	open my $fh, ">", "daySubredditBreakdown-transformed.json";
+	open my $fh, ">", "daySubredditBreakdown-testing-transformed.json";
 	print $fh $json_response;
 	close $fh;
 }
