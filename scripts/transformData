@@ -9,7 +9,7 @@ use DateTime;
 my $json;
 {
 	local $/;
-	open my $fh, "<", "daySubredditBreakdown-testing.json";
+	open my $fh, "<", "daySubredditBreakdown.json";
 	$json = <$fh>;
 	close $fh;
 }
@@ -24,17 +24,20 @@ foreach (@{ $json_data }) {
 	if (not $json_subreddits->{$_->{'subreddit'}}) {
 		$json_subreddits->{$_->{'subreddit'}} = {};
 		$json_subreddits->{$_->{'subreddit'}}->{'key'} = $_->{'subreddit'};
-		$json_subreddits->{$_->{'subreddit'}}->{'values'} = [];
 		$json_subreddits->{$_->{'subreddit'}}->{'valuesHash'} = {};
+		$json_subreddits->{$_->{'subreddit'}}->{'count'} = 0;
 	}
 	my $epoch = 1430352000 + 86400 * $_->{'createdDay'};
 	$days->{$epoch} = ();
 	$json_subreddits->{$_->{'subreddit'}}->{'valuesHash'}->{$epoch} = $_->{'countPosts'} + 0;
+	$json_subreddits->{$_->{'subreddit'}}->{'count'} += $_->{'countPosts'};
 }
 
 my $json_resp = [];
+my $count = 0;
 
-foreach (keys %$json_subreddits) {
+foreach (sort {$json_subreddits->{$b}->{'count'} <=> $json_subreddits->{$a}->{'count'}} keys %$json_subreddits) {
+	last if $count >= 1000;
 	foreach my $day (sort keys %$days) {
 		my @dayCountArray;
 		push(@dayCountArray, $day + 0);
@@ -46,12 +49,14 @@ foreach (keys %$json_subreddits) {
 		push(@{ $json_subreddits->{$_}->{'values'} }, \@dayCountArray);
 	}
 	delete $json_subreddits->{$_}->{'valuesHash'};
+	delete $json_subreddits->{$_}->{'count'};
 	push(@{ $json_resp }, $json_subreddits->{$_});
+	$count++;
 }
 
 my $json_response = JSON::to_json($json_resp, {utf8 => 1, pretty => 1});
 {
-	open my $fh, ">", "daySubredditBreakdown-testing-transformed.json";
+	open my $fh, ">", "daySubredditBreakdown-transformed.json";
 	print $fh $json_response;
 	close $fh;
 }
