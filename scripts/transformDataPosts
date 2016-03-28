@@ -1,0 +1,63 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use Text::CSV;
+use JSON;
+use DateTime;
+
+my $author_posts = {};
+my $subreddits = {};
+
+{
+	my $json;
+	{
+		local $/;
+		open my $fh, "<", "daySubredditBreakdown-transformed.json";
+		$json = <$fh>;
+		close $fh;
+	}
+
+	my $json_data = decode_json($json);
+
+	foreach (@$json_data) {
+		$subreddits->{$_->{'key'}} = ();
+	}
+}
+
+my $csv = Text::CSV->new({ sep_char => ',' });
+{
+	open my $fh, "<", "posts.csv" or die "File could not be opened: $!\n";
+	while (my $line = <$fh>) {
+		$csv->parse($line) or die "Line could not be parsed: $line\n";
+		my @fields = $csv->fields();
+		if (exists $subreddits->{$fields[1]}) {
+			$author_posts->{$fields[0]}->{$fields[1]} += 1;
+		}
+	}
+	close $fh;
+}
+
+print "Processing data.\n";
+
+foreach (keys %$author_posts) {
+	my @author_subreddits = sort keys %{ $author_posts->{$_} };
+	for (my $i = 0; $i < scalar @author_subreddits; $i++) {
+		for (my $j = $i + 1; $j < scalar @author_subreddits; $j++) {
+			$subreddits->{$author_subreddits[$i]}->{$author_subreddits[$j]} += $author_posts->{$_}->{$author_subreddits[$i]};
+		}
+	}
+}
+
+{
+	open my $fh, ">", "posts-edge-list.csv";
+	for my $sub1 (sort keys %$subreddits) {
+		for my $sub2 (sort keys %{ $subreddits->{$sub1} }) {
+			my @row = ($sub1, $sub2, $subreddits->{$sub1}->{$sub2});
+			$csv->combine(@row);
+			print $fh $csv->string() . "\n";
+		}
+	}
+	close $fh;
+}
