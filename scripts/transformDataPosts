@@ -51,13 +51,18 @@ foreach (keys %$author_posts) {
 }
 
 {
-	open my $fh, ">", "posts-edge-list.csv";
+	open my $fh, ">", "posts-adjacency-matrix.csv";
 	for my $sub1 (sort keys %$subreddits) {
-		for my $sub2 (sort keys %{ $subreddits->{$sub1} }) {
-			my @row = ($sub1, $sub2, $subreddits->{$sub1}->{$sub2});
-			$csv->combine(@row);
-			print $fh $csv->string() . "\n";
+		my @row;
+		for my $sub2 (sort keys %$subreddits) {
+			if (exists $subreddits->{$sub1}->{$sub2}) {
+				push(@row, $subreddits->{$sub1}->{$sub2});
+			} else {
+				push(@row, 0);
+			}
 		}
+		$csv->combine(@row);
+		print $fh $csv->string() . "\n";
 	}
 	close $fh;
 }
