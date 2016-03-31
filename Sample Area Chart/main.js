@@ -11,13 +11,13 @@ function start()
                                 .x(function (d) { return d[0] * 1000; })
                                 .y(function (d) { return d[1]; })
                                 .useInteractiveGuideline(false)
-                                .rightAlignYAxis(true)
-                                .showControls(true)
+                                .showControls(false)
+								.showLegend(false)
                                 .clipEdge(true);
 
             chart.xAxis.tickFormat(function (d) { return d3.time.format('%x')(new Date(d)) });
 
-            chart.yAxis.tickFormat(d3.format(',.2f'));
+            chart.yAxis.tickFormat(d3.format(',.d'));
 
             d3.select("#chart").datum(data).call(chart);
 
