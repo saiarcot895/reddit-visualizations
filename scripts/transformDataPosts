@@ -6,9 +6,12 @@ use warnings;
 use Text::CSV;
 use JSON;
 use DateTime;
+use Data::Dump qw(dump);
 
 my $author_posts = {};
 my $subreddits = {};
+
+my $count = 0;
 
 {
 	my $json;
@@ -23,6 +26,8 @@ my $subreddits = {};
 
 	foreach (@$json_data) {
 		$subreddits->{$_->{'key'}} = ();
+		$count++;
+		#last if $count >= 50;
 	}
 }
 
@@ -51,7 +56,26 @@ foreach (keys %$author_posts) {
 }
 
 {
-	open my $fh, ">", "posts-adjacency-matrix.csv";
+	open my $fh, ">", "subreddits-list.csv";
+
+	my @headers = ("name", "color");
+	$csv->combine(@headers);
+	print $fh $csv->string() . "\n";
+
+	my @colorPortions = ("79", "F2", "DA", "A9");
+	for my $sub (sort keys %$subreddits) {
+		my @row;
+		push(@row, $sub);
+		push(@row, "#" . $colorPortions[rand(scalar @colorPortions)] . $colorPortions[rand(scalar @colorPortions)] . $colorPortions[rand(scalar @colorPortions)]);
+		$csv->combine(@row);
+		print $fh $csv->string() . "\n";
+	}
+	close $fh;
+}
+
+
+{
+	my @rows;
 	for my $sub1 (sort keys %$subreddits) {
 		my @row;
 		for my $sub2 (sort keys %$subreddits) {
@@ -61,8 +85,9 @@ foreach (keys %$author_posts) {
 				push(@row, 0);
 			}
 		}
-		$csv->combine(@row);
-		print $fh $csv->string() . "\n";
+		push(@rows, \@row);
 	}
+	open my $fh, ">", "posts-adjacency-matrix.csv";
+	print $fh JSON::to_json(\@rows, {utf8 => 1, pretty => 1});
 	close $fh;
 }
