@@ -1,15 +1,18 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>Sub-Reddit Popularity</title>
+    <meta charset="UTF-8">
+    <title>Sub-Reddit Popularity</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js" charset="utf-8"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.2/nv.d3.min.js"></script>
-	<script src="main.js"></script>
+    <script src="main.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.2/nv.d3.min.css" rel="stylesheet">
 </head>
 <body>
-	<h1>Sub-Reddit Popularity</h1>
-	<svg id="chart" style="height: 2000px;"></svg>
+    <h1>Sub-Reddit Popularity</h1>
+    <button id="top10Button" type="button">Show top 10 only</button>
+    <button id="top25Button" type="button">Show top 25 only</button>
+    <button id="allButton" type="button">Show all</button>
+    <svg id="chart" style="height: 500px; width: 60%"></svg>
 </body>
 </html>
