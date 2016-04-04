@@ -11,13 +11,13 @@ function start()
                                 .x(function (d) { return d[0] * 1000; })
                                 .y(function (d) { return d[1]; })
                                 .useInteractiveGuideline(false)
-                                .showControls(false)
+                                .showControls(true)
                                 .showLegend(false)
                                 .clipEdge(true);
 
             chart.xAxis.tickFormat(function (d) { return d3.time.format('%x')(new Date(d)) });
 
-            chart.yAxis.tickFormat(d3.format(',.d'));
+            chart.yAxis.tickFormat(d3.format(',f'));
 
             data.forEach(function(d, i) {
                 d.disabled = (i >= 10);
@@ -67,9 +67,11 @@ function start()
                 .on("click", function(d) {
                     d.disabled = !d.disabled;
                     chart.update();
+                    chart.stacked.dispatch.on("areaClick.toggle", null);
                 });
 
             nv.utils.windowResize(chart.update);
+            chart.stacked.dispatch.on("areaClick.toggle", null);
 
             return chart;
         });
