@@ -1,0 +1,8 @@
+.btn {
+    margin: 3px;
+}
+
+.panel-body {
+    overflow-y: auto;
+    max-height: 250px;
+}
