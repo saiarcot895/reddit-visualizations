@@ -72,6 +72,17 @@ function start()
 
             nv.utils.windowResize(chart.update);
             chart.stacked.dispatch.on("areaClick.toggle", null);
+            chart.stacked.dispatch.on("elementClick.link", function(d) {
+                var subreddit = d.series.key;
+                var timestamp = d.point[0];
+                var link = "https://www.reddit.com/r/"
+                    + subreddit
+                    + "/search?rank=title&q=timestamp%3A"
+                    + timestamp + ".."
+                    + (timestamp + 86400) 
+                    + "&restrict_sr=on&syntax=cloudsearch";
+                window.open(link);
+            })
 
             return chart;
         });
