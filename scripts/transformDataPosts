@@ -82,7 +82,7 @@ foreach (keys %$author_posts) {
 			if (exists $subreddits->{$sub1}->{$sub2}) {
 				push(@row, $subreddits->{$sub1}->{$sub2});
 			} else {
-				push(@row, 0);
+				push(@row, $subreddits->{$sub2}->{$sub1});
 			}
 		}
 		push(@rows, \@row);
