@@ -27,7 +27,7 @@ my $count = 0;
 	foreach (@$json_data) {
 		$subreddits->{$_->{'key'}} = ();
 		$count++;
-		#last if $count >= 50;
+		last if $count >= 50;
 	}
 }
 
@@ -81,8 +81,10 @@ foreach (keys %$author_posts) {
 		for my $sub2 (sort keys %$subreddits) {
 			if (exists $subreddits->{$sub1}->{$sub2}) {
 				push(@row, $subreddits->{$sub1}->{$sub2});
-			} else {
+			} elsif (exists $subreddits->{$sub2}->{$sub1}) {
 				push(@row, $subreddits->{$sub2}->{$sub1});
+			} else {
+				push(@row, 0);
 			}
 		}
 		push(@rows, \@row);
