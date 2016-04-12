@@ -6,12 +6,9 @@ use warnings;
 use Text::CSV;
 use JSON;
 use DateTime;
-use Data::Dump qw(dump);
 
 my $author_posts = {};
 my $subreddits = {};
-
-my $count = 0;
 
 {
 	my $json;
@@ -26,8 +23,6 @@ my $count = 0;
 
 	foreach (@$json_data) {
 		$subreddits->{$_->{'key'}} = ();
-		$count++;
-		last if $count >= 50;
 	}
 }
 
@@ -50,46 +45,26 @@ foreach (keys %$author_posts) {
 	my @author_subreddits = sort keys %{ $author_posts->{$_} };
 	for (my $i = 0; $i < scalar @author_subreddits; $i++) {
 		for (my $j = $i + 1; $j < scalar @author_subreddits; $j++) {
-			$subreddits->{$author_subreddits[$i]}->{$author_subreddits[$j]} += $author_posts->{$_}->{$author_subreddits[$i]};
+			# $subreddits->{$author_subreddits[$i]}->{$author_subreddits[$j]} += $author_posts->{$_}->{$author_subreddits[$i]};
+			$subreddits->{$author_subreddits[$i]}->{$author_subreddits[$j]} += 1;
 		}
 	}
 }
 
 {
-	open my $fh, ">", "subreddits-list.csv";
-
-	my @headers = ("name", "color");
-	$csv->combine(@headers);
+	open my $fh, ">", "posts-edge-list.csv";
+	my @header = ("subreddit1", "subreddit2", "authorCount");
+	$csv->combine(@header);
 	print $fh $csv->string() . "\n";
-
-	my @colorPortions = ("79", "F2", "DA", "A9");
-	for my $sub (sort keys %$subreddits) {
-		my @row;
-		push(@row, $sub);
-		push(@row, "#" . $colorPortions[rand(scalar @colorPortions)] . $colorPortions[rand(scalar @colorPortions)] . $colorPortions[rand(scalar @colorPortions)]);
-		$csv->combine(@row);
-		print $fh $csv->string() . "\n";
-	}
-	close $fh;
-}
-
-
-{
-	my @rows;
 	for my $sub1 (sort keys %$subreddits) {
-		my @row;
-		for my $sub2 (sort keys %$subreddits) {
-			if (exists $subreddits->{$sub1}->{$sub2}) {
-				push(@row, $subreddits->{$sub1}->{$sub2});
-			} elsif (exists $subreddits->{$sub2}->{$sub1}) {
-				push(@row, $subreddits->{$sub2}->{$sub1});
-			} else {
-				push(@row, 0);
-			}
+		for my $sub2 (sort keys %{ $subreddits->{$sub1} }) {
+			my @row = ($sub1, $sub2, $subreddits->{$sub1}->{$sub2});
+			$csv->combine(@row);
+			print $fh $csv->string() . "\n";
+			@row = ($sub2, $sub1, $subreddits->{$sub1}->{$sub2});
+			$csv->combine(@row);
+			print $fh $csv->string() . "\n";
 		}
-		push(@rows, \@row);
 	}
-	open my $fh, ">", "posts-adjacency-matrix.csv";
-	print $fh JSON::to_json(\@rows, {utf8 => 1, pretty => 1});
 	close $fh;
 }

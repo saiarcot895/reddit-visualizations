@@ -7,9 +7,12 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.2/nv.d3.min.js"></script>
         <script src="https://code.jquery.com/jquery-2.2.2.min.js" integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI=" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+        <script src="chordDirective.js"></script>
+        <script src="matrixFactory.js"></script>
         <script src="main.js"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.2/nv.d3.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
         <link href="main.css" rel="stylesheet">
     </head>
     <body>
@@ -26,9 +29,9 @@
             <div class="panel-body">
             </div>
         </div>
-        <button id="top10Button" type="button">Show top 10 only</button>
-        <button id="top25Button" type="button">Show top 25 only</button>
-        <button id="allButton" type="button">Show all</button>
-        <svg id="chart" style="height: 500px; width: 60%"></svg>
+        <div class="row">
+            <svg id="chart" class="col-lg-6" style="height: 500px; width: 50%;"></svg>
+            <svg id="chordDiagram" class="col-lg-6" style="height: 500px; width: 50%;"></svg>
+        </div>
     </body>
 </html>
