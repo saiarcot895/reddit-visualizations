@@ -61,9 +61,6 @@ foreach (keys %$author_posts) {
 			my @row = ($sub1, $sub2, $subreddits->{$sub1}->{$sub2});
 			$csv->combine(@row);
 			print $fh $csv->string() . "\n";
-			@row = ($sub2, $sub1, $subreddits->{$sub1}->{$sub2});
-			$csv->combine(@row);
-			print $fh $csv->string() . "\n";
 		}
 	}
 	close $fh;
