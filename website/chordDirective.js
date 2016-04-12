@@ -1,11 +1,10 @@
-function chordDiagram() {
+function chordDiagram(colors) {
     var size = [750, 750]; // SVG SIZE WIDTH, HEIGHT
     var marg = [50, 50, 50, 50]; // TOP, RIGHT, BOTTOM, LEFT
     var dims = []; // USABLE DIMENSIONS
     dims[0] = size[0] - marg[1] - marg[3]; // WIDTH
     dims[1] = size[1] - marg[0] - marg[2]; // HEIGHT
 
-    var colors = nv.utils.defaultColor()
     var chord = d3.layout.chord()
         .padding(0.02)
         .sortGroups(d3.descending)
@@ -76,7 +75,17 @@ function chordDiagram() {
 
         gEnter.append("path")
             .style("pointer-events", "none")
-            .style("fill", function (d) { return colors(d._id); })
+            .style("fill", function (d) {
+                var buttons = $(".panel-body > button");
+                var index = -1;
+                for (var i = 0; i < buttons.length; i++) {
+                    if ($(buttons[i]).text() == d._id) {
+                        index = i;
+                        break;
+                    }
+                }
+                return colors(index);
+            })
             .attr("d", arc);
 
         gEnter.append("text")
@@ -117,7 +126,15 @@ function chordDiagram() {
         chords.enter().append("path")
             .attr("class", "chord")
             .style("fill", function (d) {
-                return colors(d.source._id);
+                var buttons = $(".panel-body > button");
+                var index = -1;
+                for (var i = 0; i < buttons.length; i++) {
+                    if ($(buttons[i]).text() == d.source._id) {
+                        index = i;
+                        break;
+                    }
+                }
+                return colors(index);
             })
         .attr("d", path)
             .on("mouseover", chordMouseover)

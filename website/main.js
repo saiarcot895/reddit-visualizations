@@ -5,7 +5,8 @@ function start()
 	var filters = {};
 	var tooltip = {};
 	var csvEdges;
-	var diagram = chordDiagram();
+	var colors = nv.utils.defaultColor()
+	var diagram = chordDiagram(colors);
 
 	var updateTooltip = function(data) {
 		tooltip = data;
@@ -46,6 +47,8 @@ function start()
 					d.disabled = false;
 					filters[d.key].hide = false;
 				}
+				// Initialize the list of colors to use. This is crappy, but necessary.
+				colors(i);
             });
 
             d3.select("#chart").datum(data).call(chart);
