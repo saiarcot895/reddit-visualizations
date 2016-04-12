@@ -42,8 +42,6 @@ function chordDiagram(colors) {
         .radius(innerRadius);
 
     var svg = d3.select("#chordDiagram")
-        .attr("class", "chart")
-        .attr({width: size[0] + "px", height: size[1] + "px"})
         .attr("preserveAspectRatio", "xMinYMin")
         .attr("viewBox", "0 0 " + size[0] + " " + size[1]);
 
