@@ -2,6 +2,24 @@
 
 function start()
 {
+	var filters = {};
+	var tooltip = {};
+	var csvEdges;
+	var diagram = chordDiagram();
+
+	var updateTooltip = function(data) {
+		tooltip = data;
+	}
+
+	var update = function(data, diagram) {
+		diagram(data.filter(function (d) {
+			return !(
+					(filters[d.subreddit1] && filters[d.subreddit1].hide)
+					|| (filters[d.subreddit2] && filters[d.subreddit2].hide)
+					);
+		}));
+	}
+
     d3.json("daySubredditBreakdown-transformed.json", function (data)
     {
         nv.addGraph(function ()
@@ -11,7 +29,7 @@ function start()
                                 .x(function (d) { return d[0] * 1000; })
                                 .y(function (d) { return d[1]; })
                                 .useInteractiveGuideline(false)
-                                .showControls(true)
+                                .showControls(false)
                                 .showLegend(false)
                                 .clipEdge(true);
 
@@ -20,31 +38,17 @@ function start()
             chart.yAxis.tickFormat(d3.format(',f'));
 
             data.forEach(function(d, i) {
-                d.disabled = (i >= 10);
+					filters[d.key] = {};
+				if (i >= 10) {
+					d.disabled = true;
+					filters[d.key].hide = true;
+				} else {
+					d.disabled = false;
+					filters[d.key].hide = false;
+				}
             });
 
             d3.select("#chart").datum(data).call(chart);
-
-            /*d3.select("#top10Button").on('click', function() {
-                data.forEach(function(d, i) {
-                    d.disabled = (i >= 10);
-                });
-                chart.update();
-            });
-
-            d3.select("#top25Button").on('click', function() {
-                data.forEach(function(d, i) {
-                    d.disabled = (i >= 25);
-                });
-                chart.update();
-            });
-
-            d3.select("#allButton").on('click', function() {
-                data.forEach(function(d, i) {
-                    d.disabled = false;
-                });
-                chart.update();
-            });*/
 
             d3.select(".panel-body")
                 .selectAll("button")
@@ -65,9 +69,11 @@ function start()
                     return d.key;
                 })
                 .on("click", function(d) {
+					filters[d.key].hide = !filters[d.key].hide;
                     d.disabled = !d.disabled;
                     chart.update();
                     chart.stacked.dispatch.on("areaClick.toggle", null);
+					update(csvEdges, diagram);
                 });
 
             nv.utils.windowResize(chart.update);
@@ -97,4 +103,12 @@ function start()
 			});
 		});
     });
+
+	d3.csv('posts-edge-list.csv', function(row) {
+		row.authorCount = +row.authorCount;
+		return row;
+	}, function (err, data) {
+		csvEdges = data;
+		update(csvEdges, diagram);
+	});
 }
