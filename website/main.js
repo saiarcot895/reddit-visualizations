@@ -2,8 +2,8 @@
 	var filters = {};
 	var tooltip = {};
 	var csvEdges;
-	var colors = nv.utils.defaultColor();
-	var diagram = chordDiagram(colors);
+	var colors;
+	var diagram;
 
 	var updateTooltip = function(data) {
 		tooltip = data;
@@ -39,8 +39,6 @@
 					d.disabled = false;
 					filters[d.key].hide = false;
 				}
-				// Initialize the list of colors to use. This is crappy, but necessary.
-				colors(i);
 			});
 
 			d3.select("#chart").datum(data).call(chart);
@@ -85,6 +83,8 @@
 				window.open(link);
 			});
 
+			colors = chart.color();
+
 			return chart;
 		});
 		$("#search-text").on("input", function() {
@@ -103,6 +103,7 @@
 		row.authorCount = +row.authorCount;
 		return row;
 	}, function (err, data) {
+		diagram = chordDiagram(colors);
 		csvEdges = data;
 		update();
 	});
