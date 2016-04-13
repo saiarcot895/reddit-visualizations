@@ -30,8 +30,10 @@ window.onload = function () {
 				.clipEdge(true);
 
 			chart.xAxis.tickFormat(function (d) { return d3.time.format('%x')(new Date(d)) });
+			chart.xAxis.axisLabel("Date");
 
 			chart.yAxis.tickFormat(d3.format(',f'));
+			chart.yAxis.axisLabel("Number of comments");
 
 			data.forEach(function(d, i) {
 				filters[d.key] = {};
