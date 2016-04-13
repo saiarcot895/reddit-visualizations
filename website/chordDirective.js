@@ -1,6 +1,6 @@
 function chordDiagram(colors) {
-    var size = [750, 750]; // SVG SIZE WIDTH, HEIGHT
-    var marg = [50, 50, 50, 50]; // TOP, RIGHT, BOTTOM, LEFT
+    var size = [$("#chordDiagram").width(), $("#chordDiagram").height()]; // SVG SIZE WIDTH, HEIGHT
+    var marg = [0, 0, 0, 0]; // TOP, RIGHT, BOTTOM, LEFT
     var dims = []; // USABLE DIMENSIONS
     dims[0] = size[0] - marg[1] - marg[3]; // WIDTH
     dims[1] = size[1] - marg[0] - marg[2]; // HEIGHT
@@ -32,7 +32,7 @@ function chordDiagram(colors) {
         return {value: value, data: items};
     });
 
-    var innerRadius = (dims[1] / 2) - 100;
+    var innerRadius = (Math.min(dims[0], dims[1]) / 2) - 100;
 
     var arc = d3.svg.arc()
         .innerRadius(innerRadius)
@@ -41,9 +41,7 @@ function chordDiagram(colors) {
     var path = d3.svg.chord()
         .radius(innerRadius);
 
-    var svg = d3.select("#chordDiagram")
-        .attr("preserveAspectRatio", "xMinYMin")
-        .attr("viewBox", "0 0 " + size[0] + " " + size[1]);
+    var svg = d3.select("#chordDiagram");
 
     var container = svg.append("g")
         .attr("class", "container")

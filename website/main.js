@@ -1,4 +1,7 @@
-﻿window.onload = function () {
+﻿nv.utils.initSVG = function(svg) {
+};
+
+window.onload = function () {
 	var filters = {};
 	var tooltip = {};
 	var csvEdges;
@@ -43,6 +46,22 @@
 
 			d3.select("#chart").datum(data).call(chart);
 
+			colors = chart.color();
+
+			d3.csv('posts-edge-list.csv', function(row) {
+				row.authorCount = +row.authorCount;
+				return row;
+			}, function (err, data) {
+				diagram = chordDiagram(colors);
+				csvEdges = data;
+				update();
+				nv.utils.windowResize(function() {
+					$("#chordDiagram").empty();
+					diagram = chordDiagram(colors);
+					update();
+				});
+			});
+
 			d3.select(".panel-body")
 				.selectAll("button")
 				.data(data)
@@ -83,10 +102,9 @@
 				window.open(link);
 			});
 
-			colors = chart.color();
-
 			return chart;
 		});
+
 		$("#search-text").on("input", function() {
 			$(".panel-body > button").each(function(i) {
 				if ($(this).text().toUpperCase()
@@ -99,12 +117,4 @@
 		});
 	});
 
-	d3.csv('posts-edge-list.csv', function(row) {
-		row.authorCount = +row.authorCount;
-		return row;
-	}, function (err, data) {
-		diagram = chordDiagram(colors);
-		csvEdges = data;
-		update();
-	});
 };

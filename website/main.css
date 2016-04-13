@@ -6,3 +6,16 @@
     overflow-y: auto;
     max-height: 250px;
 }
+
+#graphs {
+    height: 550px;
+}
+
+svg {
+    height: inherit;
+    display: block;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
