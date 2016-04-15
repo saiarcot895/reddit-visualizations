@@ -48,7 +48,7 @@ window.onload = function () {
 
 			d3.select("#chart").datum(data).call(chart);
 
-			colors = chart.color();
+			colors = chart.stacked.color();
 
 			d3.csv('posts-edge-list.csv', function(row) {
 				row.authorCount = +row.authorCount;
