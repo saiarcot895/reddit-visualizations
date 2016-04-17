@@ -30,8 +30,3 @@ svg {
     background-color: lightcoral;
     border-color: lightcoral;
 }
-
-.input-group .form-control {
-    float: left;
-    width: 30%;
-}
