@@ -47,6 +47,8 @@ function chordDiagram(colors) {
 		.attr("class", "container")
 		.attr("transform", "translate(" + ((dims[0] / 2) + marg[3]) + "," + ((dims[1] / 2) + marg[0]) + ")");
 
+	var defs = svg.append("defs");
+
 	var messages = svg.append("text")
 		.attr("class", "messages")
 		.attr("transform", "translate(10, 10)")
@@ -62,7 +64,7 @@ function chordDiagram(colors) {
 			.addKeys(['subreddit1', 'subreddit2'])
 			.update();
 
-		var defs = svg.append("defs");
+		defs.empty();
 
 		var groups = container.selectAll("g.group")
 			.data(matrix.groups(), function (d) { return d._id; });
@@ -124,6 +126,17 @@ function chordDiagram(colors) {
 
 		chords.enter().append("path")
 			.attr("class", "chord")
+		.attr("d", path)
+			.on("mouseover", chordMouseover)
+			.on("mouseout", hideTooltip);
+
+		chords.transition().duration(2000)
+			.attrTween("d", matrix.chordTween(path));
+
+		chords.exit().remove();
+
+		container.selectAll("path.chord")
+			.data(matrix.chords(), function (d) { return d._id; })
 			.style("fill", function (d) {
 				var gradient = defs.append("linearGradient")
 					.attr("id", "gradient" + d._id)
@@ -155,15 +168,7 @@ function chordDiagram(colors) {
 					.attr("stop-color", colors(targetIndex))
 					.attr("stop-opacity", "1");
 				return "url(#gradient" + d._id + ")";
-			})
-		.attr("d", path)
-			.on("mouseover", chordMouseover)
-			.on("mouseout", hideTooltip);
-
-		chords.transition().duration(2000)
-			.attrTween("d", matrix.chordTween(path));
-
-		chords.exit().remove();
+			});
 
 		function groupClick(d) {
 			d3.event.preventDefault();
