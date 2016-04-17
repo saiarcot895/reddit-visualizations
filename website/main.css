@@ -30,6 +30,7 @@ svg {
     background-color: lightcoral;
     border-color: lightcoral;
 }
+<<<<<<< HEAD
 
 .input-group .form-control {
     float: left;
@@ -39,3 +40,5 @@ svg {
 .clickable {
     cursor: pointer;
 }
+=======
+>>>>>>> origin/master
