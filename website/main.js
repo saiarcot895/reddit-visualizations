@@ -104,6 +104,12 @@ window.onload = function () {
 					+ "&restrict_sr=on&syntax=cloudsearch";
 				window.open(link);
 			});
+			chart.stacked.dispatch.on("elementMouseover.link", function(d) {
+				$("body").css("cursor", "pointer");
+			});
+			chart.stacked.dispatch.on("elementMouseout.link", function(d) {
+				$("body").css("cursor", "");
+			});
 
 			return chart;
 		});

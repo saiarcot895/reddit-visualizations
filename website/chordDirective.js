@@ -69,7 +69,7 @@ function chordDiagram(colors) {
 			.append("g")
 			.on("mouseover", dimChords)
 			.on("mouseout", resetChords)
-			.attr("class", "group clickable");
+			.attr("class", "group");
 
 		gEnter.append("path")
 			.style("fill", function (d) {
@@ -88,6 +88,7 @@ function chordDiagram(colors) {
 		gEnter.append("text")
 			.attr("dy", ".35em")
 			.on("click", groupClick)
+			.classed("clickable", true)
 			.text(function (d) {
 				return d._id;
 			});
