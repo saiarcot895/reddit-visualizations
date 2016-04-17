@@ -62,6 +62,8 @@ function chordDiagram(colors) {
 			.addKeys(['subreddit1', 'subreddit2'])
 			.update();
 
+		var defs = svg.append("defs");
+
 		var groups = container.selectAll("g.group")
 			.data(matrix.groups(), function (d) { return d._id; });
 
@@ -71,9 +73,10 @@ function chordDiagram(colors) {
 			.on("mouseout", resetChords)
 			.attr("class", "group");
 
+		var buttons = $(".panel-body > button");
+
 		gEnter.append("path")
 			.style("fill", function (d) {
-				var buttons = $(".panel-body > button");
 				var index = -1;
 				for (var i = 0; i < buttons.length; i++) {
 					if ($(buttons[i]).text() == d._id) {
@@ -122,15 +125,36 @@ function chordDiagram(colors) {
 		chords.enter().append("path")
 			.attr("class", "chord")
 			.style("fill", function (d) {
-				var buttons = $(".panel-body > button");
-				var index = -1;
-				for (var i = 0; i < buttons.length; i++) {
-					if ($(buttons[i]).text() == d.source._id) {
-						index = i;
+				var gradient = defs.append("linearGradient")
+					.attr("id", "gradient" + d._id)
+					.attr("gradientUnits", "userSpaceOnUse")
+					.attr("x1", innerRadius * Math.cos((d.source.endAngle-d.source.startAngle)/2 + d.source.startAngle - Math.PI/2))
+					.attr("y1", innerRadius * Math.sin((d.source.endAngle-d.source.startAngle)/2 + d.source.startAngle - Math.PI/2))
+					.attr("x2", innerRadius * Math.cos((d.target.endAngle-d.target.startAngle)/2 + d.target.startAngle - Math.PI/2))
+					.attr("y2", innerRadius * Math.sin((d.target.endAngle-d.target.startAngle)/2 + d.target.startAngle - Math.PI/2))
+					.attr("spreadMethod", "pad");
+				var sourceIndex = -1;
+				var targetIndex = -1;
+				for (var k = 0; k < buttons.length; k++) {
+					if ($(buttons[k]).text() == d.source._id) {
+						sourceIndex = k;
+					}
+					if ($(buttons[k]).text() == d.target._id) {
+						targetIndex = k;
+					}
+					if (sourceIndex >= 0 && targetIndex >= 0) {
 						break;
 					}
 				}
-				return colors(index);
+				gradient.append("stop")
+					.attr("offset", "0%")
+					.attr("stop-color", colors(sourceIndex))
+					.attr("stop-opacity", "1");
+				gradient.append("stop")
+					.attr("offset", "100%")
+					.attr("stop-color", colors(targetIndex))
+					.attr("stop-opacity", "1");
+				return "url(#gradient" + d._id + ")";
 			})
 		.attr("d", path)
 			.on("mouseover", chordMouseover)
