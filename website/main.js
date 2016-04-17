@@ -24,7 +24,7 @@ window.onload = function () {
 				.margin({ right: 100 })
 				.x(function (d) { return d[0] * 1000; })
 				.y(function (d) { return d[1]; })
-				.useInteractiveGuideline(false)
+				.useInteractiveGuideline(true)
 				.showControls(false)
 				.showLegend(false)
 				.clipEdge(true);

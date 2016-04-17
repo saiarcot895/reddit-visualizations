@@ -35,3 +35,7 @@ svg {
     float: left;
     width: 30%;
 }
+
+.clickable {
+    cursor: pointer;
+}
