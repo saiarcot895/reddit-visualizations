@@ -88,6 +88,7 @@ window.onload = function () {
 				chart.update();
 				chart.stacked.dispatch.on("areaClick.toggle", null);
 				update();
+				this.blur();
 			});
 
 			nv.utils.windowResize(chart.update);
