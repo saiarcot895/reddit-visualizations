@@ -93,10 +93,10 @@ window.onload = function () {
 
 			nv.utils.windowResize(chart.update);
 			chart.stacked.dispatch.on("elementMouseover.darken", function(d) {
-				chart.stacked.dispatch.areaMouseover(d);
+				$('.nv-area-' + d.seriesIndex).addClass("hover");
 			});
 			chart.stacked.dispatch.on("elementMouseout.darken", function(d) {
-				chart.stacked.dispatch.areaMouseout(d);
+				$('.nv-area-' + d.seriesIndex).removeClass("hover");
 			});
 			chart.stacked.dispatch.on("areaClick.toggle", null);
 			chart.stacked.dispatch.on("elementClick.link", function(d) {
