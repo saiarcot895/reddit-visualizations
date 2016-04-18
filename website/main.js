@@ -92,6 +92,12 @@ window.onload = function () {
 			});
 
 			nv.utils.windowResize(chart.update);
+			chart.stacked.dispatch.on("elementMouseover.darken", function(d) {
+				chart.stacked.dispatch.areaMouseover(d);
+			});
+			chart.stacked.dispatch.on("elementMouseout.darken", function(d) {
+				chart.stacked.dispatch.areaMouseout(d);
+			});
 			chart.stacked.dispatch.on("areaClick.toggle", null);
 			chart.stacked.dispatch.on("elementClick.link", function(d) {
 				var subreddit = d.series.key;

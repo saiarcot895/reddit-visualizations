@@ -22,13 +22,13 @@ svg {
 
 .btn-primary.active, .btn-primary:active, .open>.dropdown-toggle.btn-primary {
     color: #fff;
-    background-color: #ff0000;
+    background-color: #316700;
     border-color: #204d74;
 }
 
 .btn-primary:hover {
-    background-color: lightcoral;
-    border-color: lightcoral;
+    background-color: #59ab0f;
+    border-color: #59ab0f;
 }
 
 .clickable {
