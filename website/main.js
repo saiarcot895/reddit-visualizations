@@ -1,4 +1,4 @@
-﻿nv.utils.initSVG = function(svg) {
+nv.utils.initSVG = function(svg) {
 };
 
 var tooltip = nv.models.tooltip();
