@@ -7,14 +7,9 @@ function updateTooltip(data) {
 	var tooltipData = {
 		series: [
 		{
-			color: "red",
-			key: data.sname,
+			color: "transparent",
+			key: data.sname + " and " + data.tname,
 			value: data.svalue
-		},
-		{
-			color: "green",
-			key: data.tname,
-			value: data.tvalue
 		}
 		],
 		point: {
@@ -31,7 +26,6 @@ function tooltipHide() {
 
 window.onload = function () {
 	var filters = {};
-	var tooltip = {};
 	var csvEdges;
 	var colors;
 	var diagram;
@@ -41,6 +35,16 @@ window.onload = function () {
 			return !filters[d.subreddit1].hide && !filters[d.subreddit2].hide;
 		}));
 	}
+
+	tooltip.contentGenerator(function(d) {
+		if (d === null) {
+			return '';
+		}
+		var htmlView = d3.select(document.createElement("div"));
+		htmlView.append('p').append('b').text(d.series[0].key);
+		htmlView.append('p').text(d.series[0].value);
+		return htmlView.node().outerHTML;
+	});
 
 	d3.json("daySubredditBreakdown-transformed.json", function (data) {
 		nv.addGraph(function ()	{
