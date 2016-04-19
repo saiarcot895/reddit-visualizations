@@ -181,7 +181,6 @@ function chordDiagram(colors) {
 			d3.event.preventDefault();
 			d3.event.stopPropagation();
 			dimChords(d);
-			d3.select("#tooltip").style("opacity", 1);
 			updateTooltip(matrix.read(d));
 		}
 
@@ -189,7 +188,7 @@ function chordDiagram(colors) {
 			d3.event.preventDefault();
 			d3.event.stopPropagation();
 			d3.select("#tooltip").style("opacity", 0);
-			resetChords();
+			tooltipHide();
 		}
 
 		function resetChords() {

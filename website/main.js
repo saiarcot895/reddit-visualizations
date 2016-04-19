@@ -1,16 +1,40 @@
 ﻿nv.utils.initSVG = function(svg) {
 };
 
+var tooltip = nv.models.tooltip();
+
+function updateTooltip(data) {
+	var tooltipData = {
+		series: [
+		{
+			color: "red",
+			key: data.sname,
+			value: data.svalue
+		},
+		{
+			color: "green",
+			key: data.tname,
+			value: data.tvalue
+		}
+		],
+		point: {
+			x: window.event.clientX,
+			y: window.event.clientY
+		}
+	};
+	tooltip.data(tooltipData).hidden(false);
+}
+
+function tooltipHide() {
+	tooltip.hidden(true);
+}
+
 window.onload = function () {
 	var filters = {};
 	var tooltip = {};
 	var csvEdges;
 	var colors;
 	var diagram;
-
-	var updateTooltip = function(data) {
-		tooltip = data;
-	}
 
 	var update = function() {
 		diagram(csvEdges.filter(function (d) {
