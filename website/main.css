@@ -7,12 +7,13 @@
     max-height: 250px;
 }
 
-#graphs {
+#chartSection, #chordDiagramSection {
     height: 550px;
 }
 
 svg {
-    height: inherit;
+    height: 500px;
+    width: 100%;
     display: block;
     -webkit-user-select: none;
     -ms-user-select: none;
