@@ -1,4 +1,7 @@
-function chordDiagram(colors) {
+var container;
+
+function chordDiagram(colors)
+{
 	var size = [$("#chordDiagram").width(), $("#chordDiagram").height()]; // SVG SIZE WIDTH, HEIGHT
 	var marg = [0, 0, 0, 0]; // TOP, RIGHT, BOTTOM, LEFT
 	var dims = []; // USABLE DIMENSIONS
@@ -43,7 +46,7 @@ function chordDiagram(colors) {
 
 	var svg = d3.select("#chordDiagram");
 
-	var container = svg.append("g")
+	container = svg.append("g")
 		.attr("class", "container")
 		.attr("transform", "translate(" + ((dims[0] / 2) + marg[3]) + "," + ((dims[1] / 2) + marg[0]) + ")");
 
@@ -72,7 +75,9 @@ function chordDiagram(colors) {
 		var gEnter = groups.enter()
 			.append("g")
 			.on("mouseover", dimChords)
+            .on("mouseover", highlightChart)
 			.on("mouseout", resetChords)
+            .on("mouseout", unhoverChart)
 			.attr("class", "group");
 
 		var buttons = $(".panel-body > button");
@@ -177,38 +182,58 @@ function chordDiagram(colors) {
 			window.open(link);
 		}
 
+        //Mousover on the chords, the actual connection between arcs
 		function chordMouseover(d) {
 			d3.event.preventDefault();
 			d3.event.stopPropagation();
 			dimChords(d);
+			highlightChart(d);
 			updateTooltip(matrix.read(d));
 		}
 
-		function hideTooltip() {
+		function hideTooltip(d) {
 			d3.event.preventDefault();
 			d3.event.stopPropagation();
 			d3.select("#tooltip").style("opacity", 0);
 			tooltipHide();
-		}
-
-		function resetChords() {
-			d3.event.preventDefault();
-			d3.event.stopPropagation();
-			container.selectAll("path.chord").style("opacity",0.9);
-		}
-
-		function dimChords(d) {
-			d3.event.preventDefault();
-			d3.event.stopPropagation();
-			container.selectAll("path.chord").style("opacity", function (p) {
-				if (d.source) { // COMPARE CHORD IDS
-					return (p._id === d._id) ? 0.9: 0.1;
-				} else { // COMPARE GROUP IDS
-					return (p.source._id === d._id || p.target._id === d._id) ? 0.9: 0.1;
-				}
-			});
-		}
+			unhoverChart(d);
+		}	
 	}; // END DRAWCHORDS FUNCTION
 
 	return drawChords;
 };
+
+function dimChords(d)
+{
+    d3.event.preventDefault();
+    d3.event.stopPropagation();
+    container.selectAll("path.chord").style("opacity", function (p)
+    {
+        if (d.source)
+        { // COMPARE CHORD IDS
+            return (p._id === d._id) ? 0.9 : 0.1;
+        } else
+        { // COMPARE GROUP IDS
+            return (p.source._id === d._id || p.target._id === d._id) ? 0.9 : 0.1;
+        }
+    });
+}
+
+function resetChords()
+{
+    d3.event.preventDefault();
+    d3.event.stopPropagation();
+    container.selectAll("path.chord").style("opacity", 0.9);
+}
+
+function highlightChart(d)
+{
+    //Indexes don't line up - TODO figure out indexes or a way around
+    //hoverArea({ "seriesIndex": d.index });
+}
+
+function unhoverChart(d)
+{
+    //Indexes don't line up - TODO figure out indexes or a way around
+    //leaveArea({ "seriesIndex": d.index });
+}

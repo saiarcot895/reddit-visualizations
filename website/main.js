@@ -1,4 +1,4 @@
-nv.utils.initSVG = function(svg) {
+﻿nv.utils.initSVG = function(svg) {
 };
 
 var tooltip = nv.models.tooltip();
@@ -120,11 +120,14 @@ window.onload = function () {
 			});
 
 			nv.utils.windowResize(chart.update);
-			chart.stacked.dispatch.on("elementMouseover.darken", function(d) {
-				$('.nv-area-' + d.seriesIndex).addClass("hover");
+			chart.stacked.dispatch.on("elementMouseover.darken", function (d)
+			{
+			    hoverArea(d);
+			    dimChords({ "_id": d.series[0].key });
 			});
 			chart.stacked.dispatch.on("elementMouseout.darken", function(d) {
-				$('.nv-area-' + d.seriesIndex).removeClass("hover");
+			    leaveArea(d);
+			    resetChords();
 			});
 			chart.stacked.dispatch.on("areaClick.toggle", null);
 			chart.stacked.dispatch.on("elementClick.link", function(d) {
@@ -161,3 +164,13 @@ window.onload = function () {
 	});
 
 };
+
+function hoverArea(d)
+{
+    $('.nv-area-' + d.seriesIndex).addClass("hover");
+}
+
+function leaveArea(d)
+{
+    $('.nv-area-' + d.seriesIndex).removeClass("hover");
+}
