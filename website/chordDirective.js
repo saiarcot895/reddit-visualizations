@@ -75,9 +75,9 @@ function chordDiagram(colors)
 		var gEnter = groups.enter()
 			.append("g")
 			.on("mouseover", dimChords)
-            .on("mouseover", highlightChart)
+            //.on("mouseover", highlightChart)
 			.on("mouseout", resetChords)
-            .on("mouseout", unhoverChart)
+            //.on("mouseout", unhoverChart)
 			.attr("class", "group");
 
 		var buttons = $(".panel-body > button");
