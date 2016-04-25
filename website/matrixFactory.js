@@ -1,3 +1,7 @@
+/*
+ * Function to create the adjacency matrix data structure to be used with the
+ * chord diagram
+ */ 
 function chordMatrix() {
 
 	var _matrix = [], dataStore = [], _id = 0;
@@ -8,7 +12,10 @@ function chordMatrix() {
 	var reduce = function () {};
 
 	var matrix = {};
-
+    
+    /*
+     * Updates the adjacency matrix when users select a chord
+     */     
 	matrix.update = function () {
 		_matrix = [], objs = [], entry = {};
 
