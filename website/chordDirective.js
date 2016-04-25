@@ -1,6 +1,9 @@
 var container;
 var buttonMap;
 
+/*
+ * Main function for creating chord diagram
+ */  
 function chordDiagram(colors)
 {
 	var size = [$("#chordDiagram").width(), $("#chordDiagram").height()]; // SVG SIZE WIDTH, HEIGHT
@@ -200,6 +203,12 @@ function chordDiagram(colors)
 			unhoverChart(d);
 		}
 
+		/*
+		 * Function used to link chord diagram with stacked area chart
+		 * 
+		 * Selecting a sector on the chord diagram highlights corresponding part of
+		 * area chart
+		 */  
 		function highlightChart(d) {
 			if (d.source) {
 				focusOnArea([getSelectedButtonIndex(d.source._id), getSelectedButtonIndex(d.target._id)]);
@@ -230,6 +239,9 @@ function chordDiagram(colors)
 	return drawChords;
 };
 
+/*
+ * Function for dimming unselected chords in the chord diagram
+ */  
 function dimChords(d) {
 	d3.event.preventDefault();
 	d3.event.stopPropagation();
@@ -244,8 +256,43 @@ function dimChords(d) {
 	});
 }
 
+/*
+ * Resets the chord diagram to default view
+ *
+ * All chords have solid colors
+ */  
 function resetChords() {
 	d3.event.preventDefault();
 	d3.event.stopPropagation();
 	container.selectAll("path.chord").style("opacity", 0.9);
+}
+
+function unhoverChart(d)
+{
+    if (d.source)
+    {
+        leaveArea({ "seriesIndex": buttonMap.get(d.source._id) });
+        leaveArea({ "seriesIndex": buttonMap.get(d.target._id) });
+    }
+    else
+    {
+        leaveArea({ "seriesIndex": buttonMap.get(d._id) });
+    }
+}
+
+/*
+ * Deselecting a sector on the chord diagram returns corresponding part of
+ * area chart to normal, unhighlighed color
+ */  
+function unhoverChart(d)
+{
+    if (d.source)
+    {
+        leaveArea({ "seriesIndex": buttonMap.get(d.source._id) });
+        leaveArea({ "seriesIndex": buttonMap.get(d.target._id) });
+    }
+    else
+    {
+        leaveArea({ "seriesIndex": buttonMap.get(d._id) });
+    }
 }
