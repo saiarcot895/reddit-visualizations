@@ -3,6 +3,9 @@
 
 var tooltip = nv.models.tooltip();
 
+/*
+ * Function used to show tooltips on mouse hover over stacked area chart
+*/  
 function updateTooltip(data) {
 	var tooltipData = {
 		series: [
@@ -20,6 +23,9 @@ function updateTooltip(data) {
 	tooltip.data(tooltipData).hidden(false);
 }
 
+/*
+ * Function used to hide tooltips on mouse out of stacked area chart
+ */ 
 function tooltipHide() {
 	tooltip.hidden(true);
 }
@@ -172,12 +178,19 @@ window.onload = function () {
 
 };
 
+/*
+ * Function to designate areas that will be able to show tooltips on mouse
+ *  hover
+ */ 
 function hoverArea(d)
 {
     $('.nv-area-' + d.seriesIndex).addClass("hover");
     
 }
 
+/*
+ * Function to designate area as not being able to show the tooltip
+ */ 
 function leaveArea(d)
 {
     $('.nv-area-' + d.seriesIndex).removeClass("hover");

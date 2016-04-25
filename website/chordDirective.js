@@ -3,7 +3,7 @@ var buttonMap;
 
 /*
  * Main function for creating chord diagram
-*/  
+ */  
 function chordDiagram(colors)
 {
 	var size = [$("#chordDiagram").width(), $("#chordDiagram").height()]; // SVG SIZE WIDTH, HEIGHT
@@ -209,7 +209,7 @@ function chordDiagram(colors)
 
 /*
  * Function for dimming unselected chords in the chord diagram
-*/  
+ */  
 function dimChords(d)
 {
     d3.event.preventDefault();
@@ -230,7 +230,7 @@ function dimChords(d)
  * Resets the chord diagram to default view
  *
  * All chords have solid colors
-*/  
+ */  
 function resetChords()
 {
     d3.event.preventDefault();
@@ -243,7 +243,7 @@ function resetChords()
  * 
  * Selecting a sector on the chord diagram highlights corresponding part of
  * area chart
-*/  
+ */  
 function highlightChart(d)
 {
     createButtonMap();
@@ -261,7 +261,7 @@ function highlightChart(d)
 /*
  * Deselecting a sector on the chord diagram returns corresponding part of
  * area chart to normal, unhighlighed color
-*/  
+ */  
 function unhoverChart(d)
 {
     if (d.source)
@@ -279,7 +279,7 @@ function unhoverChart(d)
  * Function used to create subreddit buttons to allow users to select
  * subreddits to display
  * 
-*/  
+ */  
 function createButtonMap()
 {
     buttonMap = d3.map();
