@@ -1,4 +1,4 @@
-nv.utils.initSVG = function(svg) {
+﻿nv.utils.initSVG = function(svg) {
 };
 
 var tooltip = nv.models.tooltip();
@@ -191,7 +191,7 @@ function focusOnArea(d) {
 		if (highlight) {
 			$(this).addClass("hover");
 		} else {
-			$(this).css("opacity", 0.1);
+			d3.select(this).transition().delay(200).style("opacity", 0.2);
 		}
 	});
 }
@@ -208,7 +208,7 @@ function unfocusOnArea(d) {
 		if (highlight) {
 			$(this).removeClass("hover");
 		} else {
-			$(this).css("opacity", 1);
+		    d3.select(this).transition().delay(200).style("opacity", 1);
 		}
 	});
 }
