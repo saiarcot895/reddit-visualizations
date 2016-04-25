@@ -1,4 +1,4 @@
-﻿nv.utils.initSVG = function(svg) {
+nv.utils.initSVG = function(svg) {
 };
 
 var tooltip = nv.models.tooltip();
@@ -101,40 +101,40 @@ window.onload = function () {
 				.classed("active", function(d) {
 					return !d.disabled;
 				})
-			    .attr("type", "button")
+			.attr("type", "button")
 				.attr("data-toggle", "button")
 				.attr("autocomplete", "off")
 				.attr("aria-pressed", function(d) {
 					return !d.disabled;
 				})
-			    .text(function(d) {
-				    return d.key;
-			    })
-			    .on("click", function(d) {
-				    filters[d.key].hide = !filters[d.key].hide;
-				    d.disabled = !d.disabled;
-				    chart.update();
-				    chart.stacked.dispatch.on("areaClick.toggle", null);
-				    update();
-				    this.blur();
-			    });
+			.text(function(d) {
+				return d.key;
+			})
+			.on("click", function(d) {
+				filters[d.key].hide = !filters[d.key].hide;
+				d.disabled = !d.disabled;
+				chart.update();
+				chart.stacked.dispatch.on("areaClick.toggle", null);
+				update();
+				this.blur();
+			});
 
 			nv.utils.windowResize(chart.update);
-			chart.stacked.dispatch.on("elementMouseover.darken", function (d)
-			{
-			    hoverArea(d);
-			    dimChords({ "_id": d.series[0].key });
+			chart.stacked.dispatch.on("elementMouseover.darken", function (d) {
+				focusOnArea(d);
+				dimChords({ "_id": d.series[0].key });
 			});
 			chart.stacked.dispatch.on("elementMouseout.darken", function(d) {
-			    leaveArea(d);
-			    resetChords();
+				unfocusOnArea(d);
+				resetChords();
 			});
-			chart.stacked.dispatch.on("areaMouseover.darken", function (d)
-			{
-			    dimChords({ "_id": d.series });
+			chart.stacked.dispatch.on("areaMouseover.darken", function (d) {
+				focusOnArea(d);
+				dimChords({ "_id": d.series });
 			});
 			chart.stacked.dispatch.on("areaMouseout.darken", function(d) {
-			    resetChords();
+				unfocusOnArea(d);
+				resetChords();
 			});
 			chart.stacked.dispatch.on("areaClick.toggle", null);
 			chart.stacked.dispatch.on("elementClick.link", function(d) {
@@ -172,13 +172,38 @@ window.onload = function () {
 
 };
 
-function hoverArea(d)
-{
-    $('.nv-area-' + d.seriesIndex).addClass("hover");
-    
+function hoverArea(d) {
+	$('.nv-area-' + d.seriesIndex).addClass("hover");
 }
 
-function leaveArea(d)
-{
-    $('.nv-area-' + d.seriesIndex).removeClass("hover");
+function leaveArea(d) {
+	$('.nv-area-' + d.seriesIndex).removeClass("hover");
+}
+
+function focusOnArea(d) {
+	$('.nv-area').each(function() {
+		var highlight = false;
+		for (var id in d) {
+			highlight |= $(this).hasClass('nv-area-' + d[id]);
+		}
+		if (highlight) {
+			$(this).addClass("hover");
+		} else {
+			$(this).css("opacity", 0.1);
+		}
+	});
+}
+
+function unfocusOnArea(d) {
+	$('.nv-area').each(function() {
+		var highlight = false;
+		for (var id in d) {
+			highlight |= $(this).hasClass('nv-area-' + d[id]);
+		}
+		if (highlight) {
+			$(this).removeClass("hover");
+		} else {
+			$(this).css("opacity", 1);
+		}
+	});
 }

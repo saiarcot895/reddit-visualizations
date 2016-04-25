@@ -76,9 +76,9 @@ function chordDiagram(colors)
 		var gEnter = groups.enter()
 			.append("g")
 			.on("mouseover.chord", dimChords)
-            .on("mouseover.chart", highlightChart)
+			.on("mouseover.chart", highlightChart)
 			.on("mouseout.chord", resetChords)
-            .on("mouseout.chart", unhoverChart)
+			.on("mouseout.chart", unhoverChart)
 			.attr("class", "group");
 
 		var buttons = $(".panel-body > button");
@@ -132,7 +132,7 @@ function chordDiagram(colors)
 
 		chords.enter().append("path")
 			.attr("class", "chord")
-		.attr("d", path)
+			.attr("d", path)
 			.on("mouseover", chordMouseover)
 			.on("mouseout", hideTooltip);
 
@@ -183,7 +183,7 @@ function chordDiagram(colors)
 			window.open(link);
 		}
 
-        //Mousover on the chords, the actual connection between arcs
+		//Mouseover on the chords, the actual connection between arcs
 		function chordMouseover(d) {
 			d3.event.preventDefault();
 			d3.event.stopPropagation();
@@ -198,72 +198,54 @@ function chordDiagram(colors)
 			d3.select("#tooltip").style("opacity", 0);
 			tooltipHide();
 			unhoverChart(d);
-		}	
+		}
+
+		function highlightChart(d) {
+			if (d.source) {
+				focusOnArea([getSelectedButtonIndex(d.source._id), getSelectedButtonIndex(d.target._id)]);
+			} else {
+				focusOnArea([getSelectedButtonIndex(d._id)]);
+			}   
+		}
+
+		function unhoverChart(d) {
+			if (d.source) {
+				unfocusOnArea([getSelectedButtonIndex(d.source._id), getSelectedButtonIndex(d.target._id)]);
+			} else {
+				unfocusOnArea([getSelectedButtonIndex(d._id)]);
+			}
+		}
+
+		function getSelectedButtonIndex(id) {
+			var index = -1;
+			$(".panel-body > button.active").each(function(i) {
+				if ($(this).text() == id) {
+					index = i;
+				}
+			});
+			return index;
+		}
 	}; // END DRAWCHORDS FUNCTION
 
 	return drawChords;
 };
 
-function dimChords(d)
-{
-    d3.event.preventDefault();
-    d3.event.stopPropagation();
-    container.selectAll("path.chord").style("opacity", function (p)
-    {
-        if (d.source)
-        { // COMPARE CHORD IDS
-            return (p._id === d._id) ? 0.9 : 0.1;
-        } else
-        { // COMPARE GROUP IDS
-            return (p.source._id === d._id || p.target._id === d._id) ? 0.9 : 0.1;
-        }
-    });
+function dimChords(d) {
+	d3.event.preventDefault();
+	d3.event.stopPropagation();
+	container.selectAll("path.chord").style("opacity", function (p)	{
+		if (d.source) {
+			// COMPARE CHORD IDS
+			return (p._id === d._id) ? 0.9 : 0.1;
+		} else {
+			// COMPARE GROUP IDS
+			return (p.source._id === d._id || p.target._id === d._id) ? 0.9 : 0.1;
+		}
+	});
 }
 
-function resetChords()
-{
-    d3.event.preventDefault();
-    d3.event.stopPropagation();
-    container.selectAll("path.chord").style("opacity", 0.9);
-}
-
-function highlightChart(d)
-{
-    createButtonMap();
-    if (d.source)
-    {
-        hoverArea({ "seriesIndex": buttonMap.get(d.source._id) });
-        hoverArea({ "seriesIndex": buttonMap.get(d.target._id) });
-    }
-    else
-    {
-        hoverArea({ "seriesIndex": buttonMap.get(d._id) });
-    }   
-}
-
-function unhoverChart(d)
-{
-    if (d.source)
-    {
-        leaveArea({ "seriesIndex": buttonMap.get(d.source._id) });
-        leaveArea({ "seriesIndex": buttonMap.get(d.target._id) });
-    }
-    else
-    {
-        leaveArea({ "seriesIndex": buttonMap.get(d._id) });
-    }
-}
-
-function createButtonMap()
-{
-    buttonMap = d3.map();
-    var buttons = d3.selectAll(".filterBtn");
-    var indexCounter = 0;
-    for (var i = 0; i < 1000; i++)
-    {
-        if (buttons[0][i].className.indexOf("active") > -1)
-        {
-            buttonMap.set(buttons[0][i].innerHTML, indexCounter++);
-        }
-    }
+function resetChords() {
+	d3.event.preventDefault();
+	d3.event.stopPropagation();
+	container.selectAll("path.chord").style("opacity", 0.9);
 }
