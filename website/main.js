@@ -1,4 +1,4 @@
-﻿nv.utils.initSVG = function(svg) {
+nv.utils.initSVG = function(svg) {
 };
 
 var tooltip = nv.models.tooltip();
@@ -127,6 +127,13 @@ window.onload = function () {
 			});
 			chart.stacked.dispatch.on("elementMouseout.darken", function(d) {
 			    leaveArea(d);
+			    resetChords();
+			});
+			chart.stacked.dispatch.on("areaMouseover.darken", function (d)
+			{
+			    dimChords({ "_id": d.series });
+			});
+			chart.stacked.dispatch.on("areaMouseout.darken", function(d) {
 			    resetChords();
 			});
 			chart.stacked.dispatch.on("areaClick.toggle", null);
