@@ -35,3 +35,8 @@ svg {
 .clickable {
     cursor: pointer;
 }
+
+.nvd3.nv-stackedarea path.nv-area {
+    stroke: black !important;
+    stroke-opacity: 0.5;
+}
