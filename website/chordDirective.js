@@ -1,4 +1,5 @@
 var container;
+var buttonMap;
 
 function chordDiagram(colors)
 {
@@ -74,10 +75,10 @@ function chordDiagram(colors)
 
 		var gEnter = groups.enter()
 			.append("g")
-			.on("mouseover", dimChords)
-            //.on("mouseover", highlightChart)
-			.on("mouseout", resetChords)
-            //.on("mouseout", unhoverChart)
+			.on("mouseover.chord", dimChords)
+            .on("mouseover.chart", highlightChart)
+			.on("mouseout.chord", resetChords)
+            .on("mouseout.chart", unhoverChart)
 			.attr("class", "group");
 
 		var buttons = $(".panel-body > button");
@@ -228,12 +229,41 @@ function resetChords()
 
 function highlightChart(d)
 {
-    //Indexes don't line up - TODO figure out indexes or a way around
-    //hoverArea({ "seriesIndex": d.index });
+    createButtonMap();
+    if (d.source)
+    {
+        hoverArea({ "seriesIndex": buttonMap.get(d.source._id) });
+        hoverArea({ "seriesIndex": buttonMap.get(d.target._id) });
+    }
+    else
+    {
+        hoverArea({ "seriesIndex": buttonMap.get(d._id) });
+    }   
 }
 
 function unhoverChart(d)
 {
-    //Indexes don't line up - TODO figure out indexes or a way around
-    //leaveArea({ "seriesIndex": d.index });
+    if (d.source)
+    {
+        leaveArea({ "seriesIndex": buttonMap.get(d.source._id) });
+        leaveArea({ "seriesIndex": buttonMap.get(d.target._id) });
+    }
+    else
+    {
+        leaveArea({ "seriesIndex": buttonMap.get(d._id) });
+    }
+}
+
+function createButtonMap()
+{
+    buttonMap = d3.map();
+    var buttons = d3.selectAll(".filterBtn");
+    var indexCounter = 0;
+    for (var i = 0; i < 1000; i++)
+    {
+        if (buttons[0][i].className.indexOf("active") > -1)
+        {
+            buttonMap.set(buttons[0][i].innerHTML, indexCounter++);
+        }
+    }
 }

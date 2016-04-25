@@ -1,4 +1,4 @@
-nv.utils.initSVG = function(svg) {
+﻿nv.utils.initSVG = function(svg) {
 };
 
 var tooltip = nv.models.tooltip();
@@ -97,27 +97,27 @@ window.onload = function () {
 				.data(data)
 				.enter()
 				.append("button")
-				.classed("btn btn-primary", true)
+				.classed("btn btn-primary filterBtn", true)
 				.classed("active", function(d) {
 					return !d.disabled;
 				})
-			.attr("type", "button")
+			    .attr("type", "button")
 				.attr("data-toggle", "button")
 				.attr("autocomplete", "off")
 				.attr("aria-pressed", function(d) {
 					return !d.disabled;
 				})
-			.text(function(d) {
-				return d.key;
-			})
-			.on("click", function(d) {
-				filters[d.key].hide = !filters[d.key].hide;
-				d.disabled = !d.disabled;
-				chart.update();
-				chart.stacked.dispatch.on("areaClick.toggle", null);
-				update();
-				this.blur();
-			});
+			    .text(function(d) {
+				    return d.key;
+			    })
+			    .on("click", function(d) {
+				    filters[d.key].hide = !filters[d.key].hide;
+				    d.disabled = !d.disabled;
+				    chart.update();
+				    chart.stacked.dispatch.on("areaClick.toggle", null);
+				    update();
+				    this.blur();
+			    });
 
 			nv.utils.windowResize(chart.update);
 			chart.stacked.dispatch.on("elementMouseover.darken", function (d)
@@ -175,6 +175,7 @@ window.onload = function () {
 function hoverArea(d)
 {
     $('.nv-area-' + d.seriesIndex).addClass("hover");
+    
 }
 
 function leaveArea(d)
