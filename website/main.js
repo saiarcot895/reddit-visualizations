@@ -1,4 +1,4 @@
-﻿nv.utils.initSVG = function(svg) {
+nv.utils.initSVG = function(svg) {
 };
 
 var tooltip = nv.models.tooltip();
@@ -179,8 +179,7 @@ window.onload = function () {
 };
 
 /*
- * Function to designate areas that will be able to show tooltips on mouse
- *  hover
+ * Function to darken/lighten areas that should or shouldn't be focused
  */ 
 function focusOnArea(d) {
 	$('.nv-area').each(function() {
@@ -197,7 +196,7 @@ function focusOnArea(d) {
 }
 
 /*
- * Function to designate area as not being able to show the tooltip
+ * Function that does the opposite of focusOnArea()
  */ 
 function unfocusOnArea(d) {
 	$('.nv-area').each(function() {

@@ -208,7 +208,7 @@ function chordDiagram(colors)
 		 * 
 		 * Selecting a sector on the chord diagram highlights corresponding part of
 		 * area chart
-		 */  
+		 */
 		function highlightChart(d) {
 			if (d.source) {
 				focusOnArea([getSelectedButtonIndex(d.source._id), getSelectedButtonIndex(d.target._id)]);
@@ -217,6 +217,10 @@ function chordDiagram(colors)
 			}   
 		}
 
+		/*
+		 * Deselecting a sector on the chord diagram returns corresponding part of
+		 * area chart to normal, unhighlighed color
+		 */
 		function unhoverChart(d) {
 			if (d.source) {
 				unfocusOnArea([getSelectedButtonIndex(d.source._id), getSelectedButtonIndex(d.target._id)]);
@@ -265,34 +269,4 @@ function resetChords() {
 	d3.event.preventDefault();
 	d3.event.stopPropagation();
 	container.selectAll("path.chord").style("opacity", 0.9);
-}
-
-function unhoverChart(d)
-{
-    if (d.source)
-    {
-        leaveArea({ "seriesIndex": buttonMap.get(d.source._id) });
-        leaveArea({ "seriesIndex": buttonMap.get(d.target._id) });
-    }
-    else
-    {
-        leaveArea({ "seriesIndex": buttonMap.get(d._id) });
-    }
-}
-
-/*
- * Deselecting a sector on the chord diagram returns corresponding part of
- * area chart to normal, unhighlighed color
- */  
-function unhoverChart(d)
-{
-    if (d.source)
-    {
-        leaveArea({ "seriesIndex": buttonMap.get(d.source._id) });
-        leaveArea({ "seriesIndex": buttonMap.get(d.target._id) });
-    }
-    else
-    {
-        leaveArea({ "seriesIndex": buttonMap.get(d._id) });
-    }
 }
