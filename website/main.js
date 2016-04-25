@@ -9,7 +9,7 @@ function updateTooltip(data) {
 		{
 			color: "transparent",
 			key: data.sname + " and " + data.tname,
-			value: data.svalue
+			value: data.svalue + " users"
 		}
 		],
 		point: {
