@@ -228,16 +228,6 @@ function chordDiagram(colors)
 				unfocusOnArea([getSelectedButtonIndex(d._id)]);
 			}
 		}
-
-		function getSelectedButtonIndex(id) {
-			var index = -1;
-			$(".panel-body > button.active").each(function(i) {
-				if ($(this).text() == id) {
-					index = i;
-				}
-			});
-			return index;
-		}
 	}; // END DRAWCHORDS FUNCTION
 
 	return drawChords;

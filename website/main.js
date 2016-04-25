@@ -5,7 +5,7 @@ var tooltip = nv.models.tooltip();
 
 /*
  * Function used to show tooltips on mouse hover over stacked area chart
-*/  
+ */  
 function updateTooltip(data) {
 	var tooltipData = {
 		series: [
@@ -127,19 +127,19 @@ window.onload = function () {
 
 			nv.utils.windowResize(chart.update);
 			chart.stacked.dispatch.on("elementMouseover.darken", function (d) {
-				focusOnArea(d);
+				focusOnArea([ d.seriesIndex ]);
 				dimChords({ "_id": d.series[0].key });
 			});
 			chart.stacked.dispatch.on("elementMouseout.darken", function(d) {
-				unfocusOnArea(d);
+				unfocusOnArea([ d.seriesIndex ]);
 				resetChords();
 			});
 			chart.stacked.dispatch.on("areaMouseover.darken", function (d) {
-				focusOnArea(d);
+				focusOnArea([ d.series ]);
 				dimChords({ "_id": d.series });
 			});
 			chart.stacked.dispatch.on("areaMouseout.darken", function(d) {
-				unfocusOnArea(d);
+				unfocusOnArea([ d.series ]);
 				resetChords();
 			});
 			chart.stacked.dispatch.on("areaClick.toggle", null);
@@ -185,6 +185,9 @@ function focusOnArea(d) {
 	$('.nv-area').each(function() {
 		var highlight = false;
 		for (var id in d) {
+			if (typeof d[id] === "string") {
+				d[id] = getSelectedButtonIndex(d[id]);
+			}
 			highlight |= $(this).hasClass('nv-area-' + d[id]);
 		}
 		if (highlight) {
@@ -202,6 +205,9 @@ function unfocusOnArea(d) {
 	$('.nv-area').each(function() {
 		var highlight = false;
 		for (var id in d) {
+			if (typeof d[id] === "string") {
+				d[id] = getSelectedButtonIndex(d[id]);
+			}
 			highlight |= $(this).hasClass('nv-area-' + d[id]);
 		}
 		if (highlight) {
@@ -210,4 +216,14 @@ function unfocusOnArea(d) {
 		    d3.select(this).transition().delay(200).style("opacity", 1);
 		}
 	});
+}
+
+function getSelectedButtonIndex(id) {
+	var index = -1;
+	$(".panel-body > button.active").each(function(i) {
+		if ($(this).text() === id) {
+			index = i;
+		}
+	});
+	return index;
 }
