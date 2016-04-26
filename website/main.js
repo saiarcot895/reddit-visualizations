@@ -144,24 +144,12 @@ window.onload = function () {
 				update();
 				this.blur();
 			}).on("mouseover", function(d, i) {
-				if (!d.disabled) {
-					d3.select(this)
-						.style("background-color", "")
-						.style("opacity", "0.7");
-				} else {
-					d3.select(this)
-						.style("background-color", colors(i))
-						.style("opacity", "0.7");
-				}
+				d3.select(this).style("background-color", d3.rgb(colors(i)).brighter(0.5).toString());
 			}).on("mouseout", function(d, i) {
 				if (d.disabled) {
-					d3.select(this)
-						.style("background-color", "")
-						.style("opacity", "");
+					d3.select(this).style("background-color", "");
 				} else {
-					d3.select(this)
-						.style("background-color", colors(i))
-						.style("opacity", "");
+					d3.select(this).style("background-color", colors(i));
 				}
 			});
 
