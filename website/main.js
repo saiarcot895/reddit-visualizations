@@ -103,26 +103,84 @@ window.onload = function () {
 				.data(data)
 				.enter()
 				.append("button")
-				.classed("btn btn-primary filterBtn", true)
+				.classed("btn filterBtn", true)
 				.classed("active", function(d) {
 					return !d.disabled;
 				})
 			.attr("type", "button")
 				.attr("data-toggle", "button")
+				.attr("data-placement", "top")
 				.attr("autocomplete", "off")
 				.attr("aria-pressed", function(d) {
 					return !d.disabled;
 				})
+				.attr("title", function(d) {
+					var total = 0;
+					for (var i in d.values) {
+						total += d.values[i][1];
+					}
+					return d3.format(',f')(total) + " comments";
+				})
 			.text(function(d) {
 				return d.key;
 			})
-			.on("click", function(d) {
+			.style("background-color", function(d, i) {
+				if (d.disabled) {
+					return "";
+				} else {
+					return colors(i);
+				}
+			})
+			.on("click", function(d, i) {
 				filters[d.key].hide = !filters[d.key].hide;
 				d.disabled = !d.disabled;
+				if (d.disabled) {
+					d3.select(this).style("background-color", "");
+				} else {
+					d3.select(this).style("background-color", colors(i));
+				}
 				chart.update();
 				chart.stacked.dispatch.on("areaClick.toggle", null);
 				update();
 				this.blur();
+			}).on("mouseover", function(d, i) {
+				if (!d.disabled) {
+					d3.select(this)
+						.style("background-color", "")
+						.style("opacity", "0.7");
+				} else {
+					d3.select(this)
+						.style("background-color", colors(i))
+						.style("opacity", "0.7");
+				}
+			}).on("mouseout", function(d, i) {
+				if (d.disabled) {
+					d3.select(this)
+						.style("background-color", "")
+						.style("opacity", "");
+				} else {
+					d3.select(this)
+						.style("background-color", colors(i))
+						.style("opacity", "");
+				}
+			});
+
+			$(".panel-body > button").tooltip();
+
+			$("#deselectAllButton").on("click", function() {
+				d3.select(".panel-body")
+					.selectAll("button.active")
+					.style("background-color", "");
+				$(".panel-body > button.active").click();
+				for (var i in data) {
+					if (!data[i].disabled) {
+						filters[data[i].key].hide = true;
+						data[i].disabled = true;
+					}
+				}
+				chart.update();
+				chart.stacked.dispatch.on("areaClick.toggle", null);
+				update();
 			});
 
 			nv.utils.windowResize(chart.update);
@@ -164,10 +222,10 @@ window.onload = function () {
 			return chart;
 		});
 
-		$("#search-text").on("input", function() {
+		$("#searchText").on("input", function() {
 			$(".panel-body > button").each(function(i) {
 				if ($(this).text().toUpperCase()
-						.indexOf($("#search-text").val().toUpperCase()) != -1) {
+						.indexOf($(this).val().toUpperCase()) != -1) {
 					$(this).show();
 				} else {
 					$(this).hide();

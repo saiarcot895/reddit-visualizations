@@ -21,7 +21,7 @@ svg {
     user-select: none;
 }
 
-.btn-primary.active, .btn-primary:active, .open>.dropdown-toggle.btn-primary {
+/*.btn-primary.active, .btn-primary:active, .open>.dropdown-toggle.btn-primary {
     color: #fff;
     background-color: #316700;
     border-color: #204d74;
@@ -30,7 +30,7 @@ svg {
 .btn-primary:hover {
     background-color: #59ab0f;
     border-color: #59ab0f;
-}
+}*/
 
 .clickable {
     cursor: pointer;
