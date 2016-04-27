@@ -213,7 +213,7 @@ window.onload = function () {
 		$("#searchText").on("input", function() {
 			$(".panel-body > button").each(function(i) {
 				if ($(this).text().toUpperCase()
-						.indexOf($(this).val().toUpperCase()) != -1) {
+						.indexOf($("#searchText").val().toUpperCase()) != -1) {
 					$(this).show();
 				} else {
 					$(this).hide();
